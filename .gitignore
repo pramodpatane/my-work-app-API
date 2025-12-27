@@ -1,0 +1,18 @@
+## .NET API
+bin/
+obj/
+*.user
+*.suo
+appsettings.Development.json
+
+## Angular UI
+node_modules/
+dist/
+.angular/
+npm-debug.log*
+yarn-error.log*
+
+## OS
+.vs/
+.vscode/
+.DS_Store

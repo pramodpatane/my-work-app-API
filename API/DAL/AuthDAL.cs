@@ -1,0 +1,116 @@
+﻿using API.DAL.Interfaces;
+using API.Models.Core;
+using Dapper;
+using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Tokens;
+using System.Data;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+
+namespace API.DAL
+{
+    public class AuthDAL: IAuthDAL
+    {
+        private readonly string _connectionString;
+        private readonly IConfiguration _configuration;
+        public AuthDAL(IConfiguration configuration)
+        {
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _configuration = configuration; 
+        }
+
+        /// <summary>
+        /// This method to convert password into PasswordHash and PasswordSalt
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="passwordHash"></param>
+        /// <param name="passwordSalt"></param>
+        public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512())
+            {
+                passwordSalt = hmac.Key;                 // auto-generated salt
+                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+            }
+        }
+
+        /// <summary>
+        /// To check entered user is exist or not
+        /// </summary>
+        /// <param name="useremail"></param>
+        /// <returns></returns>
+        public async Task<int> IsUserExist(string useremail)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@value", "ValidateUser");
+                parameters.Add("@userEmail", useremail);
+
+                var newId = await connection.ExecuteScalarAsync<int>(
+                    "USP_UserLogin",
+                    parameters,
+                    commandType: CommandType.StoredProcedure
+                );
+                return newId;
+            }
+        }
+
+        /// <summary>
+        /// Get user details by email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public async Task<LoginResponse> GetUserByEmail(string email)
+        {
+            using var con = new SqlConnection(_connectionString);
+            var parameters = new DynamicParameters();
+            parameters.Add("@value", "GetUserByEmail");
+            parameters.Add("@userEmail", email);
+
+            return await con.QueryFirstOrDefaultAsync<LoginResponse>(
+                "USP_UserLogin",
+                parameters,
+                commandType: CommandType.StoredProcedure
+            );
+        }
+
+        /// <summary>
+        /// This service method to generate token for user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public string GenerateToken(LoginResponse user)
+        {
+            var secretKey = _configuration["Jwt:Key"];
+            var issuer = _configuration["Jwt:Issuer"];
+            var audience = _configuration["Jwt:Audience"];
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim("FullName", user.UserName ?? ""),
+                new Claim(ClaimTypes.Role, user.RoleName ?? "User"),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            var token = new JwtSecurityToken(
+                issuer: issuer,
+                audience: audience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddHours(2),      // Token expiry
+                signingCredentials: credentials
+            );
+
+            //var refreshToken = GenerateRefreshToken(ipAddress);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+    }
+}
