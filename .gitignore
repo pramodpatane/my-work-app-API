@@ -9,8 +9,8 @@ appsettings.Development.json
 node_modules/
 dist/
 .angular/
-npm-debug.log*
-yarn-error.log*
+bin/
+obj/
 
 ## OS
 .vs/
