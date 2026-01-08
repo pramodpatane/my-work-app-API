@@ -81,6 +81,9 @@ void ConfigureServices(IServiceCollection services)
 
     services.AddScoped<IUserRolesService, UserRolesService>();
     services.AddScoped<IUserRolesDAL, UserRolesDAL>();
+
+    services.AddScoped<IDepartmentService, DepartmentService>();
+    services.AddScoped<IDepartmentDAL, DepartmentDAL>();
 }
 
 void Configure(WebApplication app)
