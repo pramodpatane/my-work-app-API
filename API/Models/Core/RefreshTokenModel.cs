@@ -2,7 +2,8 @@
 {
     public class RefreshTokenModel
     {
-        public string Token { get; set; } = string.Empty;
+        public string? Token { get; set; }   
+        public string RefreshToken { get; set; } = string.Empty;
         public DateTime Expires { get; set; }
         public bool IsExpired => DateTime.UtcNow >= Expires;
         public DateTime Created { get; set; }

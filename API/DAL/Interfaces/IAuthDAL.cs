@@ -8,8 +8,6 @@ namespace API.DAL.Interfaces
         
         public Task<int> IsUserExist(string useremail);
 
-        public Task<LoginResponse> GetUserByEmail(string email);
-
-        string GenerateToken(LoginResponse user);
+        public Task<LoginResponse> GetUserByEmail(string email);                
     }
 }
