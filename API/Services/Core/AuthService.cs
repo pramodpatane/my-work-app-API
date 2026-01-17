@@ -10,10 +10,12 @@ namespace API.Services.Core
     {
         private readonly IConfiguration _configuration;
         private readonly IAuthDAL _authDAL;
-        public AuthService(IConfiguration configuration, IAuthDAL authDAL) 
+        private readonly IJWTTokenService _jwtService;
+        public AuthService(IConfiguration configuration, IAuthDAL authDAL, IJWTTokenService jwtService) 
         {
             _configuration = configuration;
             _authDAL = authDAL;
+            _jwtService = jwtService;   
         }
 
         /// <summary>
@@ -38,7 +40,6 @@ namespace API.Services.Core
 
                 if (Convert.ToInt32(isUserExist) == 0)
                 {
-                    //throw new Exception("Invalid email or password.");
                     response.IsSuccess = false;
                     response.Message = "Invalid email or password.";
                     return response;
@@ -54,19 +55,18 @@ namespace API.Services.Core
                     if (!VerifyPassword(login.Password, user.PasswordHash, user.PasswordSalt))
                         throw new Exception("Invalid email or password.");
 
-                    var token = _authDAL.GenerateToken(user);
-
-                    //var loginResponse = new LoginResponse
-                    //{
-                    response.Token = token;
+                    var token = _jwtService.GenerateToken(user);
+                                        
+                    response.Token = token.Token;
+                    response.RefreshToken = token.RefreshToken;
+                    response.ExpiresIn = token.Expires;
                     response.Id = user.Id;
                     response.Email = user.Email;
                     response.UserName = user.UserName;
                     response.RoleName = user.RoleName;
                     response.IsActive = user.IsActive;
                     response.ProfilePhotoUrl = user.ProfilePhotoUrl;
-                    //};
-
+                    
                     response.IsSuccess = true;
                     response.Message = "Login Succeed!";
                 }
@@ -93,17 +93,6 @@ namespace API.Services.Core
             var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
 
             return computedHash.SequenceEqual(storedHash);
-        }
-
-        private RefreshTokenModel GenerateRefreshToken(string ipAddress)
-        {
-            return new RefreshTokenModel
-            {
-                Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
-                Expires = DateTime.UtcNow.AddDays(7),
-                Created = DateTime.UtcNow,
-                CreatedByIp = ipAddress
-            };
-        }
+        }        
     }
 }

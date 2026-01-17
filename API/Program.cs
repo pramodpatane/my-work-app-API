@@ -14,20 +14,24 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 //this is for add authentication
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
     {
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
 
@@ -52,9 +56,10 @@ void ConfigureServices(IServiceCollection services)
             policy =>
             {
                 policy.WithOrigins("http://localhost:4200")
-      .AllowAnyHeader()
-      .AllowAnyMethod();
-            });
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+            }
+        );
     });
 
     // Add DbContext with SQL Server
@@ -69,6 +74,8 @@ void ConfigureServices(IServiceCollection services)
     services.AddSwaggerGen();
 
     // Dependency Injection
+    services.AddScoped<IJWTTokenService, JWTTokenService>();
+
     services.AddScoped<IAuthService, AuthService>();
     services.AddScoped<IAuthDAL, AuthDAL>();
 
