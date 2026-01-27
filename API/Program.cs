@@ -74,11 +74,6 @@ void ConfigureServices(IServiceCollection services)
     services.AddSwaggerGen();
 
     // Dependency Injection
-    services.AddScoped<IJWTTokenService, JWTTokenService>();
-
-    services.AddScoped<IAuthService, AuthService>();
-    services.AddScoped<IAuthDAL, AuthDAL>();
-
     services.AddScoped<IEmployeeService, EmployeeService>();
     services.AddScoped<IEmployeeDAL, EmployeeDAL>();
     services.AddScoped<IEmployeeRepository, EmplopyeeRepository>();
@@ -91,6 +86,12 @@ void ConfigureServices(IServiceCollection services)
 
     services.AddScoped<IDepartmentService, DepartmentService>();
     services.AddScoped<IDepartmentDAL, DepartmentDAL>();
+
+    // Login/Auth Services Dependencies
+    services.AddTransient<IJWTTokenService, JWTTokenService>();
+
+    services.AddTransient<IAuthService, AuthService>();
+    services.AddTransient<IAuthDAL, AuthDAL>();
 }
 
 void Configure(WebApplication app)
