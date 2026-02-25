@@ -8,14 +8,12 @@ namespace API.Services.Core
 {
     public class AuthService: IAuthService
     {
-        private readonly IConfiguration _configuration;
         private readonly IAuthDAL _authDAL;
         private readonly IJWTTokenService _jwtService;
-        public AuthService(IConfiguration configuration, IAuthDAL authDAL, IJWTTokenService jwtService) 
+        public AuthService(IAuthDAL authDAL, IJWTTokenService jwtService) 
         {
-            _configuration = configuration;
             _authDAL = authDAL;
-            _jwtService = jwtService;   
+            _jwtService = jwtService;
         }
 
         /// <summary>
@@ -29,31 +27,34 @@ namespace API.Services.Core
             try
             {
                 var response = new LoginResponse();
-                var isUserExist = await _authDAL.IsUserExist(login.Useremail);
+                var userExistRes = await _authDAL.IsUserExist(login.Useremail);
 
-                if (Convert.ToInt32(isUserExist) == 2)
+                if (Convert.ToInt32(userExistRes) == 2)
                 {
                     response.IsSuccess = false;
                     response.Message = "EmailId is not verified.";
                     return response;
                 }                    
 
-                if (Convert.ToInt32(isUserExist) == 0)
+                if (Convert.ToInt32(userExistRes) == 0)
                 {
                     response.IsSuccess = false;
                     response.Message = "Invalid email or password.";
                     return response;
                 }
 
-                if (Convert.ToInt32(isUserExist) == 1)
+                if (Convert.ToInt32(userExistRes) == 1)
                 {
                     var user = await _authDAL.GetUserByEmail(login.Useremail);
 
                     if (user == null)
                         throw new Exception("Invalid email or password.");
 
-                    if (!VerifyPassword(login.Password, user.PasswordHash, user.PasswordSalt))
-                        throw new Exception("Invalid email or password.");
+                    if(!login.IsOtpVerified)
+                    {
+                        if (!VerifyPassword(login.Password, user.PasswordHash, user.PasswordSalt))
+                            throw new Exception("Invalid email or password.");
+                    }                    
 
                     var token = _jwtService.GenerateToken(user);
                                         
@@ -79,7 +80,7 @@ namespace API.Services.Core
                 throw new Exception(ex.Message);
             }
         }
-
+                
         /// <summary>
         /// This service method to verify password salt and hash with DB stored
         /// </summary>

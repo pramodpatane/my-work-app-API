@@ -87,11 +87,18 @@ void ConfigureServices(IServiceCollection services)
     services.AddScoped<IDepartmentService, DepartmentService>();
     services.AddScoped<IDepartmentDAL, DepartmentDAL>();
 
-    // Login/Auth Services Dependencies
-    services.AddTransient<IJWTTokenService, JWTTokenService>();
+    // Email Services Dependencies
+    services.AddTransient<IEmailDAL, EmailDAL>();
+    services.AddTransient<IEmailService, EmailService>();
 
-    services.AddTransient<IAuthService, AuthService>();
-    services.AddTransient<IAuthDAL, AuthDAL>();
+    services.AddTransient<IOtpDAL, OtpDAL>();
+    services.AddTransient<IOTPService, OTPService>();
+
+    // Auth/login services dependencies
+    services.AddSingleton<IJWTTokenService, JWTTokenService>();
+
+    services.AddSingleton<IAuthService, AuthService>();
+    services.AddSingleton<IAuthDAL, AuthDAL>();
 }
 
 void Configure(WebApplication app)

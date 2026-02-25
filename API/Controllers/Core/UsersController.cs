@@ -11,8 +11,11 @@ namespace API.Controllers.Core
     public class UsersController : ControllerBase
     {
         private readonly IUsersService _usersService;
-        public UsersController(IUsersService usersService) {
+        private readonly IEmailService _emailService;
+        public UsersController(IUsersService usersService, IEmailService emailService)
+        {
             _usersService = usersService;
+            _emailService = emailService;
         }
 
         [HttpPost]
