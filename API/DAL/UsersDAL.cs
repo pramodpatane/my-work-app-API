@@ -70,7 +70,7 @@ namespace API.DAL
                 parameters.Add("@Role", user.RoleId);
                 parameters.Add("@ProfileImageUrl", user.ProfileImageURL);
                 parameters.Add("@IsEmailVerified", user.IsEmailVerified);
-                parameters.Add("@CreatedBy", "NULL");
+                parameters.Add("@CreatedBy", user.CreatedBy);
 
                 var newId = await connection.ExecuteScalarAsync<int>(
                     "USP_Users",

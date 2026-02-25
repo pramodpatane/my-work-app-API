@@ -4,5 +4,6 @@
     {
         public string? Useremail { get; set; }
         public string? Password { get; set; }
+        public bool IsOtpVerified { get; set; } = false;
     }
 }

@@ -40,9 +40,9 @@ namespace API.Controllers.Core
                 var response = await _userRolesService.GetDropdown();
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
     }
