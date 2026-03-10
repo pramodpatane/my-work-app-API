@@ -33,8 +33,9 @@ namespace API.Controllers.Core
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("Create")]
-        public async Task<IActionResult> InsertUser ([FromBody] Users users)
+        public async Task<IActionResult> InsertUser ([FromBody] UsersDto users)
         {
             try
             {
@@ -46,6 +47,18 @@ namespace API.Controllers.Core
             }
         }
 
-        
+        [HttpGet("GetById/{RecordId}")]
+        public async Task<IActionResult> GetById(Guid RecordId)
+        {
+            try
+            {
+                var response = await _usersService.GetById(RecordId);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

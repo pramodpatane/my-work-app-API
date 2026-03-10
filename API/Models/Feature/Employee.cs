@@ -1,11 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using API.Models.Core;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Models.Feature
 {
-    public class Employee
+    public class Employee: BaseEntity
     {
-        [Required]
-        public int Id { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]
@@ -15,15 +14,6 @@ namespace API.Models.Feature
         [Required]
         public int Salary { get; set; }
         [Required]
-        public int DepartmentId { get; set; }
-        [Required]
-        public bool IsActive { get; set; }
-        public bool IsDeleted { get; set; } = false;
-        public string CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public string UpdatedBy { get; set; }
-        
-        public DateTime UpdatedDate { get; set; }
-
+        public int DepartmentId { get; set; }        
     }
 }

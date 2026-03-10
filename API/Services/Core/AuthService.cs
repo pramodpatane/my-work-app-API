@@ -32,7 +32,7 @@ namespace API.Services.Core
                 if (Convert.ToInt32(userExistRes) == 2)
                 {
                     response.IsSuccess = false;
-                    response.Message = "EmailId is not verified.";
+                    response.Message = "User EmailId is not verified.";
                     return response;
                 }                    
 
