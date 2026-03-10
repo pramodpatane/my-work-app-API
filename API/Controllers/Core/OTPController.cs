@@ -56,20 +56,7 @@ namespace API.Controllers.Core
         public async Task<IActionResult> VerifyOtp([FromBody] OTPDTO model)
         {
             var isValid = await _otpService.VerifyOtp(model.Email, model.OTP);
-
-            if (!isValid)
-                return BadRequest("Invalid or expired OTP");
-
-            if (isValid)
-            {
-                Login login = new Login();
-                login.IsOtpVerified = true;
-                login.Useremail = model.Email;
-
-                var response = await _authService.Login(login);
-                return Ok(response);
-            }
-            return Ok("1");
+            return Ok(isValid);
         }
     }
 }

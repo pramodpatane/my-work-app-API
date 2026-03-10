@@ -1,34 +1,32 @@
 ﻿using API.DAL.Interfaces;
 using API.Models.Core;
 using API.Models.Feature;
-using API.Repositories.Interfaces;
 using API.Services.Interfaces;
 
 namespace API.Services
 {
-    public class EmployeeService: IEmployeeService
+    public class EmployeeService : IEmployeeService
     {
-        private readonly IEmployeeRepository _employeeRepository;
         private readonly IEmployeeDAL _employeeDAL;
-        public EmployeeService(IEmployeeRepository employeeRepository, IEmployeeDAL employeeDAL) {
-            _employeeRepository = employeeRepository;
-            _employeeDAL = employeeDAL; 
-        }
-
-        public async Task<List<Employee>> GetEmployees(FilterData model)
+        public EmployeeService(IEmployeeDAL employeeDAL)
         {
-            try
-            {
-                var result = await _employeeRepository.GetEmployees(model);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            _employeeDAL = employeeDAL;
         }
 
-        public async Task<List<EmployeeViewModel>> GetEmployeesData(FilterData model)
+        //public async Task<List<Employee>> GetEmployees(FilterData model)
+        //{
+        //    try
+        //    {
+        //        var result = await _employeeRepository.GetEmployees(model);
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+
+        public async Task<GridResponse<EmployeeViewModel>> GetEmployeesData(FilterData model)
         {
             try
             {
@@ -41,14 +39,14 @@ namespace API.Services
             }
         }
 
-        public async Task<Employee> GetEmployeeById(int id)
+        public async Task<EmployeeViewModel> GetById(Guid id)
         {
             try
             {
-                var response = await _employeeRepository.GetEmployeeById(id);
+                var response = await _employeeDAL.GetById(id);
                 return response;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -58,10 +56,10 @@ namespace API.Services
         {
             try
             {
-                var response = await _employeeRepository.CreateEmployee(employee);
+                var response = await _employeeDAL.Create(employee);
                 return response;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -71,7 +69,7 @@ namespace API.Services
         {
             try
             {
-                var response = await _employeeRepository.UpdateEmployee(employee);
+                var response = await _employeeDAL.Update(employee);
                 return response;
             }
             catch (Exception ex)
@@ -80,11 +78,11 @@ namespace API.Services
             }
         }
 
-        public async Task<string> DeleteEmployeeById(int id)
+        public async Task<Response> DeleteEmployeeById(Employee employee)
         {
             try
             {
-                var response = await _employeeRepository.DeleteEmployeeById(id);
+                var response = await _employeeDAL.Delete(employee);
                 return response;
             }
             catch (Exception ex)

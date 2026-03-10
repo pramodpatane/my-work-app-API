@@ -55,8 +55,9 @@ namespace API.DAL
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task<int> InsertUser(Users user)
+        public async Task<Response> InsertUser(UsersDto user)
         {
+            var response = new Response();
             using (var connection = new SqlConnection(_connectionString))
             {
                 var parameters = new DynamicParameters();
@@ -77,8 +78,34 @@ namespace API.DAL
                     parameters,
                     commandType: CommandType.StoredProcedure
                 );
+                if(newId == 0)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "User already exists!";
+                } else
+                {
+                    response.IsSuccess = true;
+                    response.Message = Convert.ToString(newId);
+                }
+                return response;
+            }
+        }
 
-                return newId;
+        public async Task<Users> GetById(Guid RecordId)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@value", "GetById");
+                parameters.Add("@RecordId", RecordId);
+
+                var data = await connection.QueryFirstOrDefaultAsync<Users>(
+                    "USP_Users",
+                    parameters,
+                    commandType: CommandType.StoredProcedure
+                );
+
+                return data;
             }
         }
     }

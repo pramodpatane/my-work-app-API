@@ -10,11 +10,9 @@ namespace API.Controllers.Core
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        public readonly IUserRolesService _userRolesService;
-        public AuthController(IAuthService authService, IUserRolesService userRolesService)
+        public AuthController(IAuthService authService)
         {
             _authService = authService;
-            _userRolesService = userRolesService;
         }
         [HttpPost]
         [Route("Login")]
@@ -28,21 +26,6 @@ namespace API.Controllers.Core
             catch (Exception ex)
             {
                 throw ex;
-            }
-        }
-
-        [HttpGet]
-        [Route("GetUserDropdown")]
-        public async Task<IActionResult> GetDropdown()
-        {
-            try
-            {
-                var response = await _userRolesService.GetDropdown();
-                return Ok(response);
-            }
-            catch (Exception)
-            {
-                throw;
             }
         }
     }

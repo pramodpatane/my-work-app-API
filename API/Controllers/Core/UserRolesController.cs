@@ -15,6 +15,7 @@ namespace API.Controllers.Core
             _userRolesService = userRolesService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("GetDropdown")]
         public async Task<IActionResult> GetDropdown()

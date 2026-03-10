@@ -5,16 +5,16 @@ namespace API.Services.Interfaces
 {
     public interface IEmployeeService
     {
-        public Task<List<Employee>> GetEmployees(FilterData model);
+        //public Task<List<Employee>> GetEmployees(FilterData model);
 
-        public Task<List<EmployeeViewModel>> GetEmployeesData(FilterData model);
+        public Task<GridResponse<EmployeeViewModel>> GetEmployeesData(FilterData model);
 
-        public Task<Employee> GetEmployeeById(int id);
+        public Task<EmployeeViewModel> GetById(Guid id);
 
         public Task<int> CreateEmployee(Employee employee);
 
         public Task<int> UpdateEmployee(Employee employee);
 
-        public Task<string> DeleteEmployeeById(int id);
+        public Task<Response> DeleteEmployeeById(Employee employee);
     }
 }

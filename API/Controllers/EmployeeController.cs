@@ -17,48 +17,79 @@ namespace API.Controllers
             _employeeService = employeeService;
         }
 
-        [HttpPost("GetEmployees")]
-        //[Route("GetEmployee")]
-        public async Task<ActionResult> GetEmployees(FilterData model) {
-            var result = await _employeeService.GetEmployees(model);
-            return Ok(result);
-        }
-
         [HttpPost("GetEmployeesData")]
-        //[Route("GetEmployee")]
         public async Task<ActionResult> GetEmployeesData(FilterData model)
         {
-            var result = await _employeeService.GetEmployeesData(model);
-            return Ok(result);
+            try
+            {
+                var result = await _employeeService.GetEmployeesData(model);
+                return Ok(result);
+            }
+            catch (Exception ex) {
+                throw ex;
+            }            
         }
 
         [HttpGet]
         [Route("GetEmployeeById/{id}")]
-        public async Task<ActionResult> GetEmployeeById(int id)
+        public async Task<ActionResult> GetById(Guid id)
         {
-            var result = await _employeeService.GetEmployeeById(id);
-            return Ok(result);
+            try
+            {
+                var result = await _employeeService.GetById(id);
+                return Ok(result);
+            }
+            catch (Exception ex) {
+                throw ex;
+            }            
         }
 
         [HttpPost("Create")]
-        public async Task<ActionResult> CreateEmployees(Employee employee)
+        public async Task<ActionResult> Create(Employee employee)
         {
-            var result = await _employeeService.CreateEmployee(employee);
-            return Ok(result);
+            try
+            {
+                var userEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+                employee.CreatedBy = userEmail;
+                var result = await _employeeService.CreateEmployee(employee);
+                return Ok(result);
+            }
+            catch (Exception ex) {
+                throw ex;
+            }
         }
 
         [HttpPost("Update")]
-        public async Task<ActionResult> UpdateEmployee(Employee employee)
+        public async Task<ActionResult> Update(Employee employee)
         {
-            var result = await _employeeService.UpdateEmployee(employee);
-            return Ok(result);
+            try
+            {
+                var userEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+                employee.CreatedBy = userEmail;
+                var result = await _employeeService.UpdateEmployee(employee);
+                return Ok(result);
+            }
+            catch (Exception ex) {
+                throw ex;
+            }            
         }
 
-        [HttpPost("Delete/{id}")]
-        public async Task<ActionResult> DeleteEmployeeById(int id)
+        [HttpGet("Delete/{recordId}")]
+        public async Task<ActionResult> Delete(Guid recordId)
         {
-            var result = await _employeeService.DeleteEmployeeById(id);
-            return Ok(result);
+            try
+            {
+                Employee employee = new Employee();
+                var userEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+                employee.CreatedBy = userEmail;
+                employee.RecordId = recordId;
+                var result = await _employeeService.DeleteEmployeeById(employee);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }            
         }
     }
 }

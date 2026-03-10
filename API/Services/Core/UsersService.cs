@@ -32,22 +32,35 @@ namespace API.Services.Core
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task<int> InsertUser(Users user)
+        public async Task<Response> InsertUser(UsersDto user)
         {
             try
             {
+                var response = new Response();
                 // Convert plain password into hash + salt
                 _authDAL.CreatePasswordHash(user.Password, out byte[] hash, out byte[] salt);
 
                 user.PasswordHash = hash;
                 user.PasswordSalt = salt;
 
-                // Don't save plain password
                 user.Password = null;
-                var response = _userDAL.InsertUser(user);
-                return response.Result;
+                response = await _userDAL.InsertUser(user);
+                return response;
             }
             catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<Users> GetById(Guid RecordId)
+        {
+            try
+            {
+                var response = await _userDAL.GetById(RecordId);
+                return response;
+            }
+            catch(Exception ex)
             {
                 throw ex;
             }

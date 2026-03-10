@@ -6,6 +6,8 @@ namespace API.DAL.Interfaces
     {
         public Task<List<Users>> GetUsersData(FilterData filterData);
 
-        public Task<int> InsertUser(Users user);                
+        public Task<Response> InsertUser(UsersDto user);
+
+        public Task<Users> GetById(Guid RecordId);
     }
 }
