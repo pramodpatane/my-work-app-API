@@ -1,5 +1,6 @@
-﻿using API.Models.Core;
-using API.Services.Interfaces;
+﻿using API.Application.DTOs;
+using API.Application.Interfaces;
+using API.Domain.Models.Core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.Core
@@ -41,7 +42,7 @@ namespace API.Controllers.Core
 
             var saveOTPResponse = await _otpService.SaveOtp(emailRequest.ToEmail, otp);
 
-            if(saveOTPResponse.IsSuccess)
+            if (saveOTPResponse.IsSuccess)
             {
                 emailRequest.Body = emailRequest.Body + " " + otp;
                 await _emailService.SendEmailAsync(emailRequest);

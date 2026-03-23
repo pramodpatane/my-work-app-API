@@ -1,5 +1,6 @@
-﻿using API.Models.Core;
-using API.Services.Interfaces;
+﻿using API.Application.DTOs;
+using API.Application.Interfaces;
+using API.Domain.Models.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
