@@ -1,4 +1,4 @@
-﻿using API.Services.Interfaces;
+﻿using API.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

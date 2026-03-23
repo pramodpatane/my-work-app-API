@@ -1,6 +1,6 @@
-﻿using API.Models.Core;
-using API.Models.Feature;
-using API.Services.Interfaces;
+﻿using API.Application.Interfaces;
+using API.Domain.Models.Core;
+using API.Domain.Models.Feature;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,7 +45,7 @@ namespace API.Controllers
         }
 
         [HttpPost("Create")]
-        public async Task<ActionResult> Create(Employee employee)
+        public async Task<IActionResult> Create(Employee employee)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpPost("Update")]
+        [HttpPut("Update")]
         public async Task<ActionResult> Update(Employee employee)
         {
             try

@@ -1,11 +1,12 @@
-using API.Contexts;
-using API.DAL;
-using API.DAL.Interfaces;
-using API.Repositories;
-using API.Repositories.Interfaces;
-using API.Services;
-using API.Services.Core;
-using API.Services.Interfaces;
+using API.Application.Interfaces;
+using API.Application.Services;
+using API.Application.Services.Core;
+using API.Domain.Middlewares;
+using API.Infrastructure.Contexts;
+using API.Infrastructure.DAL;
+using API.Infrastructure.DAL.Interfaces;
+using API.Infrastructure.Repositories;
+using API.Infrastructure.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -55,7 +56,7 @@ void ConfigureServices(IServiceCollection services)
         options.AddPolicy(MyAllowSpecificOrigins,
             policy =>
             {
-                policy.WithOrigins("http://localhost:4200")
+                policy.WithOrigins("http://localhost:4200", "https://my-app-ui-ten.vercel.app/")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
             }
@@ -121,6 +122,7 @@ void Configure(WebApplication app)
 
     // Add middleware here
     app.UseMiddleware<RequestCounterMiddleware>();
+    app.UseMiddleware<RequestLoggingMiddleware>();
 
     // CORS
     app.UseCors(MyAllowSpecificOrigins);
