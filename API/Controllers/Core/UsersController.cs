@@ -19,7 +19,7 @@ namespace API.Controllers.Core
             _emailService = emailService;
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("GetUsers")]
         public async Task<IActionResult> GetUsersData(FilterData filterData)
         {
@@ -35,7 +35,7 @@ namespace API.Controllers.Core
         }
 
         [AllowAnonymous]
-        [HttpPost("Create")]
+        [HttpPost]
         public async Task<IActionResult> InsertUser ([FromBody] UsersDto users)
         {
             try

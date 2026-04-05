@@ -12,9 +12,11 @@ namespace API.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
+        public string CreatedBy = ""; 
         public EmployeeController(IEmployeeService employeeService)
         {
             _employeeService = employeeService;
+            CreatedBy = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
         }
 
         [HttpPost("GetEmployeesData")]
@@ -31,7 +33,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("GetEmployeeById/{id}")]
+        [Route("{id}")]
         public async Task<ActionResult> GetById(Guid id)
         {
             try
@@ -44,13 +46,12 @@ namespace API.Controllers
             }            
         }
 
-        [HttpPost("Create")]
+        [HttpPost]
         public async Task<IActionResult> Create(Employee employee)
         {
             try
             {
-                var userEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
-                employee.CreatedBy = userEmail;
+                employee.CreatedBy = CreatedBy;
                 var result = await _employeeService.CreateEmployee(employee);
                 return Ok(result);
             }
@@ -59,13 +60,12 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("Update")]
+        [HttpPut]
         public async Task<ActionResult> Update(Employee employee)
         {
             try
             {
-                var userEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
-                employee.CreatedBy = userEmail;
+                employee.UpdatedBy = CreatedBy;
                 var result = await _employeeService.UpdateEmployee(employee);
                 return Ok(result);
             }
@@ -80,8 +80,7 @@ namespace API.Controllers
             try
             {
                 Employee employee = new Employee();
-                var userEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
-                employee.CreatedBy = userEmail;
+                employee.UpdatedBy = CreatedBy;
                 employee.RecordId = recordId;
                 var result = await _employeeService.DeleteEmployeeById(employee);
                 return Ok(result);
