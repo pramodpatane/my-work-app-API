@@ -14,7 +14,7 @@ namespace API.Controllers.Core
             this._emailService = emailService;
         }
 
-        [HttpGet("GetEmailConfiguration/{formCode}")]
+        [HttpGet("{formCode}")]
         public async Task<Response> GetEmailConfiguration(string formCode)
         {
             try

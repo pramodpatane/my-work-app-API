@@ -7,7 +7,7 @@ using System.Data;
 
 namespace API.Infrastructure.DAL
 {
-    public class EmployeeDAL: IEmployeeDAL
+    public class EmployeeDAL : IEmployeeDAL
     {
         private readonly string _connectionString;
 
