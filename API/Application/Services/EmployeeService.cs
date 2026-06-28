@@ -1,4 +1,5 @@
 ﻿using API.Application.Interfaces;
+using API.Domain.Entities.Core;
 using API.Domain.Models.Core;
 using API.Domain.Models.Feature;
 using API.Infrastructure.DAL.Interfaces;

@@ -1,5 +1,4 @@
-﻿using API.Domain.Models.Core;
-using API.Domain.Models.Feature;
+﻿using API.Domain.Entities.Core;
 
 namespace API.Infrastructure.Repositories.Interfaces
 {

@@ -1,4 +1,4 @@
-﻿using API.Domain.Models.Core;
+﻿using API.Domain.Entities.Core;
 
 namespace API.Application.Interfaces
 {

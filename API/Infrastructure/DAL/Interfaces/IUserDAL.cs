@@ -1,4 +1,5 @@
 ﻿using API.Application.DTOs;
+using API.Domain.Entities.Core;
 using API.Domain.Models.Core;
 
 namespace API.Infrastructure.DAL.Interfaces

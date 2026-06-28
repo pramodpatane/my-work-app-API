@@ -1,6 +1,6 @@
 ﻿using API.Application.DTOs;
 using API.Application.Interfaces;
-using API.Domain.Models.Core;
+using API.Domain.Entities.Core;
 using API.Infrastructure.DAL.Interfaces;
 using MailKit.Security;
 using MimeKit;

@@ -1,4 +1,4 @@
-﻿namespace API.Domain.Models.Feature
+﻿namespace API.Domain.Entities.Core
 {
     public class RequestCounter
     {

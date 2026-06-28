@@ -1,6 +1,6 @@
 ﻿using API.Application.DTOs;
 using API.Application.Interfaces;
-using API.Domain.Models.Core;
+using API.Domain.Entities.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +9,7 @@ namespace API.Controllers.Core
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseApiController
     {
         private readonly IUsersService _usersService;
         private readonly IEmailService _emailService;
