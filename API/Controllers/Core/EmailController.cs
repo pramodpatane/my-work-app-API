@@ -1,5 +1,5 @@
 ﻿using API.Application.Interfaces;
-using API.Domain.Models.Core;
+using API.Domain.Entities.Core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.Core

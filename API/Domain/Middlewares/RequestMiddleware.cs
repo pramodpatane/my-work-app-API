@@ -1,4 +1,4 @@
-﻿using API.Domain.Models.Feature;
+﻿using API.Domain.Entities.Core;
 using API.Infrastructure.Contexts;
 
 public class RequestCounterMiddleware

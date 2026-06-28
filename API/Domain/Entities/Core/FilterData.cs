@@ -1,4 +1,4 @@
-﻿namespace API.Domain.Models.Core
+﻿namespace API.Domain.Entities.Core
 {
     public class FilterData
     {

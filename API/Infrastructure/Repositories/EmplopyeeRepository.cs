@@ -1,5 +1,4 @@
-﻿using API.Domain.Models.Core;
-using API.Domain.Models.Feature;
+﻿using API.Domain.Entities.Core;
 using API.Infrastructure.Contexts;
 using API.Infrastructure.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;

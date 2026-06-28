@@ -1,7 +1,6 @@
-﻿using API.Domain.Models.Core;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace API.Domain.Models.Feature
+namespace API.Domain.Entities.Core
 {
     public class Employee: BaseEntity
     {

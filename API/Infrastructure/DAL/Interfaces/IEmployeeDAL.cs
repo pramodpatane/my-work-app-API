@@ -1,4 +1,5 @@
-﻿using API.Domain.Models.Core;
+﻿using API.Domain.Entities.Core;
+using API.Domain.Models.Core;
 using API.Domain.Models.Feature;
 
 namespace API.Infrastructure.DAL.Interfaces

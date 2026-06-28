@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using API.Domain.Entities.Core;
+using Microsoft.AspNetCore.Identity;
 
 namespace API.Domain.Models.Core
 {

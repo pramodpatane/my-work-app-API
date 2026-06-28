@@ -2,23 +2,18 @@
 using API.Infrastructure.DAL.Interfaces;
 using Dapper;
 using Microsoft.Data.SqlClient;
-using Microsoft.IdentityModel.Tokens;
 using System.Data;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace API.Infrastructure.DAL
 {
-    public class AuthDAL: IAuthDAL
+    public class AuthDAL : IAuthDAL
     {
         private readonly string _connectionString;
-        private readonly IConfiguration _configuration;
         public AuthDAL(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
-            _configuration = configuration; 
         }
 
         /// <summary>

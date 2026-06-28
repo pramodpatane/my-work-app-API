@@ -1,4 +1,6 @@
-﻿namespace API.Domain.Models.Core
+﻿using API.Domain.Entities.Core;
+
+namespace API.Domain.Models.Core
 {
     public class Users: BaseEntity
     {

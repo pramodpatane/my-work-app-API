@@ -1,4 +1,4 @@
-﻿using API.Domain.Models.Core;
+﻿using API.Domain.Entities.Core;
 using API.Infrastructure.DAL.Interfaces;
 using Dapper;
 using Microsoft.Data.SqlClient;

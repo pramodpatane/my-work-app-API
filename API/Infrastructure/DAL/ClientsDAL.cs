@@ -8,20 +8,20 @@ using System.Data;
 
 namespace API.Infrastructure.DAL
 {
-    public class EmployeeDAL : IEmployeeDAL
+    public class ClientsDAL : IClientsDAL
     {
         private readonly string _connectionString;
 
-        public EmployeeDAL(IConfiguration configuration)
+        public ClientsDAL(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public async Task<GridResponse<EmployeeViewModel>> GetEmployeesData(FilterData filterData)
+        public async Task<GridResponse<ClientsViewModel>> GetAllData(FilterData filterData)
         {
             try
             {
-                GridResponse<EmployeeViewModel> response = new GridResponse<EmployeeViewModel>();
+                GridResponse<ClientsViewModel> response = new GridResponse<ClientsViewModel>();
 
                 using (var connection = new SqlConnection(_connectionString))
                 {
@@ -35,11 +35,11 @@ namespace API.Infrastructure.DAL
                     parameters.Add("@sqlFilterString", filterData.FilterString);
 
                     using (var multi = await connection.QueryMultipleAsync(
-                        "USP_EmployeeGridData",
+                        "USP_ClientsGridData",
                         parameters,
                         commandType: CommandType.StoredProcedure))
                     {
-                        response.Data = (await multi.ReadAsync<EmployeeViewModel>()).ToList();
+                        response.Data = (await multi.ReadAsync<ClientsViewModel>()).ToList();
                         response.TotalCount = await multi.ReadFirstAsync<int>();
                     }
                 }
@@ -52,7 +52,7 @@ namespace API.Infrastructure.DAL
             }
         }
 
-        public async Task<EmployeeViewModel> GetById(Guid recordId)
+        public async Task<ClientsViewModel> GetById(Guid recordId)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -60,8 +60,8 @@ namespace API.Infrastructure.DAL
                 parameters.Add("@value1", "GetById");
                 parameters.Add("@RecordId", recordId);
 
-                var data = await connection.QueryFirstOrDefaultAsync<EmployeeViewModel>(
-                    "USP_Employees",
+                var data = await connection.QueryFirstOrDefaultAsync<ClientsViewModel>(
+                    "USP_Clients",
                     parameters,
                     commandType: CommandType.StoredProcedure
                 );
@@ -70,65 +70,75 @@ namespace API.Infrastructure.DAL
             }
         }
 
-        public async Task<int> Create(Employee employee)
+        public async Task<Response> Create(Clients model)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@value1", "insert");
-                parameters.Add("@fname", employee.FirstName);
-                parameters.Add("@lname", employee.LastName);
-                parameters.Add("@email", employee.Email);
-                parameters.Add("@salary", employee.Salary);
-                parameters.Add("@department", employee.DepartmentId);
-                parameters.Add("@user", employee.CreatedBy);
-                parameters.Add("@RecordId", employee.RecordId);
+                parameters.Add("RecordId", Guid.NewGuid());
+                parameters.Add("@clientCode", model.ClientCode);
+                parameters.Add("@name", model.Name);
+                parameters.Add("@clientType", model.ClientType);
+                parameters.Add("@category", model.Category);
+                parameters.Add("@contactPerson", model.ContactPerson);
+                parameters.Add("@address", model.Address);
+                parameters.Add("@email", model.Email);
+                parameters.Add("@mobile", model.Mobile);
+                parameters.Add("@alternateMobile", model.AlternateMobile);
+                parameters.Add("@TaxId", model.TaxId);
+                parameters.Add("@useremail", model.CreatedBy);
 
                 var data = await connection.ExecuteScalarAsync<int>(
-                    "USP_Employees",
+                    "USP_Clients",
                     parameters,
                     commandType: CommandType.StoredProcedure
                 );
 
-                return data;
+                return new Response { IsSuccess = data > 0 };
             }
         }
 
-        public async Task<int> Update(Employee employee)
+        public async Task<Response> Update(Clients model)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@value1", "update");
-                parameters.Add("@fname", employee.FirstName);
-                parameters.Add("@lname", employee.LastName);
-                parameters.Add("@email", employee.Email);
-                parameters.Add("@salary", employee.Salary);
-                parameters.Add("@department", employee.DepartmentId);
-                parameters.Add("@user", employee.UpdatedBy);
-                parameters.Add("@RecordId", employee.RecordId);
+                parameters.Add("RecordId", model.RecordId);
+                parameters.Add("@clientCode", model.ClientCode);
+                parameters.Add("@name", model.Name);
+                parameters.Add("@clientType", model.ClientType);
+                parameters.Add("@category", model.Category);
+                parameters.Add("@contactPerson", model.ContactPerson);
+                parameters.Add("@address", model.Address);
+                parameters.Add("@email", model.Email);
+                parameters.Add("@mobile", model.Mobile);
+                parameters.Add("@alternateMobile", model.AlternateMobile);
+                parameters.Add("@TaxId", model.TaxId);
+                parameters.Add("@useremail", model.UpdatedBy);
 
                 var data = await connection.ExecuteScalarAsync<int>(
-                    "USP_Employees",
+                    "USP_Clients",
                     parameters,
                     commandType: CommandType.StoredProcedure
                 );
 
-                return data;
+                return new Response { IsSuccess = data > 0 };
             }
         }
 
-        public async Task<Response> Delete(Employee employee)
+        public async Task<Response> Delete(Clients model)
         {
             await using var connection = new SqlConnection(_connectionString);
 
             var parameters = new DynamicParameters();
-            parameters.Add("@value1", "delete");
-            parameters.Add("@user", employee.UpdatedBy);
-            parameters.Add("@RecordId", employee.RecordId);
+            parameters.Add("@VALUE1", "delete");
+            parameters.Add("@useremail", model.UpdatedBy);
+            parameters.Add("@RecordId", model.RecordId);
 
             var result = await connection.QueryFirstOrDefaultAsync<int>(
-                "USP_Employees",
+                "USP_Clients",
                 parameters,
                 commandType: CommandType.StoredProcedure
             );

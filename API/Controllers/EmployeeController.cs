@@ -1,6 +1,6 @@
 ﻿using API.Application.Interfaces;
-using API.Domain.Models.Core;
-using API.Domain.Models.Feature;
+using API.Controllers.Core;
+using API.Domain.Entities.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,18 +9,16 @@ namespace API.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class EmployeeController : ControllerBase
+    public class EmployeeController: BaseApiController
     {
         private readonly IEmployeeService _employeeService;
-        public string CreatedBy = ""; 
         public EmployeeController(IEmployeeService employeeService)
         {
             _employeeService = employeeService;
-            CreatedBy = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
         }
 
-        [HttpPost("GetEmployeesData")]
-        public async Task<ActionResult> GetEmployeesData(FilterData model)
+        [HttpPost("GetData")]
+        public async Task<ActionResult> GetEmployeesData([FromBody] FilterData model)
         {
             try
             {
@@ -33,7 +31,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("GetById{id}")]
         public async Task<ActionResult> GetById(Guid id)
         {
             try
@@ -46,12 +44,12 @@ namespace API.Controllers
             }            
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(Employee employee)
+        [HttpPost("Insert")]
+        public async Task<ActionResult> Create([FromBody] Employee employee)
         {
             try
             {
-                employee.CreatedBy = CreatedBy;
+                employee.CreatedBy = UserEmail;
                 var result = await _employeeService.CreateEmployee(employee);
                 return Ok(result);
             }
@@ -60,12 +58,13 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut]
-        public async Task<ActionResult> Update(Employee employee)
+        [HttpPut("Update")]
+        public async Task<ActionResult> Update([FromBody] Employee employee)
         {
             try
             {
-                employee.UpdatedBy = CreatedBy;
+                employee.UpdatedBy = UserEmail;
+                    //User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
                 var result = await _employeeService.UpdateEmployee(employee);
                 return Ok(result);
             }
@@ -74,13 +73,13 @@ namespace API.Controllers
             }            
         }
 
-        [HttpGet("Delete/{recordId}")]
+        [HttpDelete("Delete{recordId}")]
         public async Task<ActionResult> Delete(Guid recordId)
         {
             try
             {
                 Employee employee = new Employee();
-                employee.UpdatedBy = CreatedBy;
+                employee.UpdatedBy = UserEmail;
                 employee.RecordId = recordId;
                 var result = await _employeeService.DeleteEmployeeById(employee);
                 return Ok(result);

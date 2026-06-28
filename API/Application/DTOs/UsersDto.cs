@@ -13,7 +13,7 @@ namespace API.Application.DTOs
         public string? Phone { get; set; }
         public string CreatedBy { get; set; }
         public int RoleId { get; set; }
-        public string ProfileImageURL { get; set; }
+        public string? ProfileImageURL { get; set; }
         public bool IsEmailVerified { get; set; }
     }
 }

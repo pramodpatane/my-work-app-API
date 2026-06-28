@@ -79,6 +79,9 @@ void ConfigureServices(IServiceCollection services)
     services.AddScoped<IEmployeeDAL, EmployeeDAL>();
     services.AddScoped<IEmployeeRepository, EmplopyeeRepository>();
 
+    services.AddScoped<IClientsService, ClientsService>();
+    services.AddScoped<IClientsDAL, ClientsDAL>();
+
     services.AddScoped<IUsersService, UsersService>();
     services.AddScoped<IUsersDAL, UsersDAL>();
 
