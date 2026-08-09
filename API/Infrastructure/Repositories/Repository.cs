@@ -19,12 +19,16 @@ namespace API.Infrastructure.Repositories
         public async Task<List<T>> GetAll()
         {
             return await _dbSet.ToListAsync();
+            //return dbContext.Set<T>().AsNoTracking().Where(w => w.IsActive == true && w.IsDeleted == false);
         }
 
         // Get By Id
         public async Task<T> GetById(int id)
         {
             return await _dbSet.FindAsync(id);  // .FirstOrDefaultAsync(x => x.Id == id);
+            //return await dbContext.Set<T>()
+            //             .AsNoTracking()
+            //             .FirstOrDefaultAsync(e => e.RecordId == recordId && e.IsActive == true && e.IsDeleted == false);
         }
 
         // Insert

@@ -7,11 +7,11 @@ using API.Infrastructure.DAL.Interfaces;
 
 namespace API.Application.Services.Core
 {
-    public class UsersService: IUsersService
+    public class UsersService : IUsersService
     {
         private readonly IUsersDAL _userDAL;
         private readonly IAuthDAL _authDAL;
-        public UsersService(IUsersDAL userDAL, IAuthDAL authDAL) 
+        public UsersService(IUsersDAL userDAL, IAuthDAL authDAL)
         {
             _userDAL = userDAL;
             _authDAL = authDAL;
@@ -62,7 +62,7 @@ namespace API.Application.Services.Core
                 var response = await _userDAL.GetById(RecordId);
                 return response;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }

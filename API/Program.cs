@@ -103,6 +103,9 @@ void ConfigureServices(IServiceCollection services)
 
     services.AddSingleton<IAuthService, AuthService>();
     services.AddSingleton<IAuthDAL, AuthDAL>();
+
+    services.AddSingleton<IAppMenusService, AppMenusService>();
+    services.AddSingleton<IAppMenusDAL, AppMenusDAL>();
 }
 
 void Configure(WebApplication app)
@@ -124,7 +127,7 @@ void Configure(WebApplication app)
     app.UseHttpsRedirection();
 
     // Add middleware here
-    app.UseMiddleware<RequestCounterMiddleware>();
+    //app.UseMiddleware<RequestCounterMiddleware>();
     app.UseMiddleware<RequestLoggingMiddleware>();
 
     // CORS

@@ -93,5 +93,20 @@ namespace API.Controllers
                 throw ex;
             }
         }
+
+        [HttpGet]
+        [Route("GetDropdown")]
+        public async Task<ActionResult> GetDropdown()
+        {
+            try
+            {
+                var result = await _clientsService.GetClientsDropdown();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

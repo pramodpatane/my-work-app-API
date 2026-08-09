@@ -1,4 +1,5 @@
-﻿using API.Domain.Entities.Core;
+﻿using API.Application.DTOs;
+using API.Domain.Entities.Core;
 using API.Domain.Models.Core;
 using API.Domain.Models.Feature;
 using API.Infrastructure.DAL.Interfaces;
@@ -17,11 +18,11 @@ namespace API.Infrastructure.DAL
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public async Task<GridResponse<ClientsViewModel>> GetAllData(FilterData filterData)
+        public async Task<ClientsGridResponse> GetAllData(FilterData filterData)
         {
             try
             {
-                GridResponse<ClientsViewModel> response = new GridResponse<ClientsViewModel>();
+                ClientsGridResponse response = new ClientsGridResponse();
 
                 using (var connection = new SqlConnection(_connectionString))
                 {
@@ -41,6 +42,7 @@ namespace API.Infrastructure.DAL
                     {
                         response.Data = (await multi.ReadAsync<ClientsViewModel>()).ToList();
                         response.TotalCount = await multi.ReadFirstAsync<int>();
+                        response.ThisMonthTotal = await multi.ReadFirstAsync<int>();
                     }
                 }
 
@@ -78,10 +80,11 @@ namespace API.Infrastructure.DAL
                 parameters.Add("@value1", "insert");
                 parameters.Add("RecordId", Guid.NewGuid());
                 parameters.Add("@clientCode", model.ClientCode);
-                parameters.Add("@name", model.Name);
+                parameters.Add("@firstname", model.FirstName);
+                parameters.Add("@lastname", model.LastName);
                 parameters.Add("@clientType", model.ClientType);
                 parameters.Add("@category", model.Category);
-                parameters.Add("@contactPerson", model.ContactPerson);
+                parameters.Add("@username", model.UserName);
                 parameters.Add("@address", model.Address);
                 parameters.Add("@email", model.Email);
                 parameters.Add("@mobile", model.Mobile);
@@ -107,10 +110,11 @@ namespace API.Infrastructure.DAL
                 parameters.Add("@value1", "update");
                 parameters.Add("RecordId", model.RecordId);
                 parameters.Add("@clientCode", model.ClientCode);
-                parameters.Add("@name", model.Name);
+                parameters.Add("@firstname", model.FirstName);
+                parameters.Add("@lastname", model.LastName);
                 parameters.Add("@clientType", model.ClientType);
                 parameters.Add("@category", model.Category);
-                parameters.Add("@contactPerson", model.ContactPerson);
+                parameters.Add("@username", model.UserName);
                 parameters.Add("@address", model.Address);
                 parameters.Add("@email", model.Email);
                 parameters.Add("@mobile", model.Mobile);
@@ -124,7 +128,7 @@ namespace API.Infrastructure.DAL
                     commandType: CommandType.StoredProcedure
                 );
 
-                return new Response { IsSuccess = data > 0 };
+                return new Response { IsSuccess = data > 0, Message = "Record Updated Successfully!" };
             }
         }
 
@@ -157,6 +161,23 @@ namespace API.Infrastructure.DAL
                 IsSuccess = true,
                 Message = "Record deleted successfully!"
             };
+        }
+
+        public async Task<List<DropdownModel>> GetClientsDropdown()
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@value1", "getDropdown");
+
+                var data = await connection.QueryAsync<DropdownModel>(
+                    "USP_Clients",
+                    parameters,
+                    commandType: CommandType.StoredProcedure
+                );
+
+                return data.ToList();
+            }
         }
     }
 }

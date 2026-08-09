@@ -63,6 +63,7 @@ namespace API.Application.Services.Core
                     response.RefreshToken = token.RefreshToken;
                     response.ExpiresIn = token.Expires;
                     response.Id = user.Id;
+                    response.RecordId = user.RecordId;
                     response.Email = user.Email;
                     response.UserName = user.UserName;
                     response.RoleName = user.RoleName;

@@ -2,11 +2,10 @@
 using API.Infrastructure.Contexts;
 using API.Infrastructure.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace API.Infrastructure.Repositories
 {
-    public class EmplopyeeRepository: IEmployeeRepository
+    public class EmplopyeeRepository : IEmployeeRepository
     {
         private readonly MyContext _context;
         public EmplopyeeRepository(MyContext context)
@@ -19,7 +18,7 @@ namespace API.Infrastructure.Repositories
         {
             var employees = await _context.Employees1
                 .Where(e => e.IsActive == true)
-                .OrderBy(e => e.Id) 
+                .OrderBy(e => e.Id)
                 .Skip(model.Skip)
                 .Take(model.Pagesize)
                 .Select(e => new Employee
@@ -59,16 +58,16 @@ namespace API.Infrastructure.Repositories
                                      .FirstOrDefaultAsync(e => e.Email == employee.Email);
                 if (existing != null)
                     return 0;
-                
+
                 employee.CreatedDate = DateTime.Now;
                 await _context.Employees1.AddAsync(employee);
                 await _context.SaveChangesAsync();
                 return employee.Id;
-                
+
             }
             catch (Exception ex)
             {
-                throw ex; 
+                throw ex;
             }
         }
 
@@ -97,7 +96,7 @@ namespace API.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                throw ex; 
+                throw ex;
             }
         }
 

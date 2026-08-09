@@ -33,31 +33,26 @@ namespace API.Domain.Models.Core
         /// <summary>
         /// Can Add
         /// </summary>
-        [JsonIgnore]
         public bool? CanAdd { get; set; }
 
         /// <summary>
         /// Can Edit
         /// </summary>
-        [JsonIgnore]
         public bool? CanEdit { get; set; }
 
         /// <summary>
         /// Can Delete
         /// </summary>
-        [JsonIgnore]
         public bool? CanDelete { get; set; }
 
         /// <summary>
         /// Can View
         /// </summary>
-        [JsonIgnore]
         public bool? CanView { get; set; }
 
         /// <summary>
         /// Application Menu GUID
         /// </summary>
-        [JsonIgnore]
         public Guid? ApplicationMenuGUID { get; set; }
 
         /// <summary>
@@ -70,5 +65,8 @@ namespace API.Domain.Models.Core
         /// Auth Menu Web View Model
         /// </summary>
         public List<AuthMenusViewModel>? Children { get; set; }
+
+        [JsonIgnore]
+        public string? ChildMenus { get; set; }
     }
 }

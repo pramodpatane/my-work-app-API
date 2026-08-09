@@ -1,4 +1,5 @@
-﻿using API.Application.Interfaces;
+﻿using API.Application.DTOs;
+using API.Application.Interfaces;
 using API.Domain.Entities.Core;
 using API.Domain.Models.Core;
 using API.Domain.Models.Feature;
@@ -14,7 +15,7 @@ namespace API.Application.Services
             _clientsDAL = clientsDAL;
         }
 
-        public async Task<GridResponse<ClientsViewModel>> GetAllData(FilterData filterData)
+        public async Task<ClientsGridResponse> GetAllData(FilterData filterData)
         {
             try
             {
@@ -70,6 +71,19 @@ namespace API.Application.Services
             try
             {
                 var response = await _clientsDAL.Delete(employee);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<DropdownModel>> GetClientsDropdown()
+        {
+            try
+            {
+                var response = await _clientsDAL.GetClientsDropdown();
                 return response;
             }
             catch (Exception ex)

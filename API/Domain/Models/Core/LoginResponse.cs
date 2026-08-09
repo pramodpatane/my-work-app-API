@@ -6,6 +6,7 @@ namespace API.Domain.Models.Core
     public class LoginResponse: Response
     {
         public string? Id { get; set; }
+        public Guid RecordId { get; set; }
         public string? UserName { get; set; }
         public string? Email { get; set; }
         public string? RoleName { get; set; }

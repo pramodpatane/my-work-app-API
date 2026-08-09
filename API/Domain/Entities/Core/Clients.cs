@@ -4,13 +4,15 @@
     {
         public string ClientCode { get; set; }
 
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
 
         public string ClientType { get; set; }
 
         public string Category { get; set; }
 
-        public string ContactPerson { get; set; }
+        public string UserName { get; set; }
 
         public string Address { get; set; }
 
