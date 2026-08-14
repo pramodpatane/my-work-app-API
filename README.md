@@ -6,8 +6,8 @@
 - SQL Server
 
 ## Project Structure
-/API - .NET Core API  
-/UI - Angular App  
+/Server - .NET Core API  
+/Client - Angular App  
 
 ## Run Backend
 dotnet run
